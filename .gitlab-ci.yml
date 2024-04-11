@@ -1,0 +1,58 @@
+default:
+  interruptible: true
+  image:
+    name: b-ouquet-ci:$CI_COMMIT_SHA
+    pull_policy: if-not-present
+  tags:
+    - yandex-cloud
+
+stages:
+  - .pre
+  - test
+  - .post
+
+build-ci-image:
+  stage: .pre
+  image:
+    name: docker:24-dind
+    pull_policy: if-not-present
+  only:
+    - master
+    - merge_requests
+  script:
+    - docker build -t b-ouquet-ci:$CI_COMMIT_SHA -f build/Dockerfile-ci .
+    - docker tag b-ouquet-ci:$CI_COMMIT_SHA b-ouquet-ci:latest
+
+cleanup-ci-image:
+  stage: .post
+  image:
+    name: docker:24-dind
+    pull_policy: if-not-present
+  when: always
+  allow_failure: true
+  only:
+  - master
+  - merge_requests
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - docker rmi b-ouquet-ci:$CI_COMMIT_SHA
+
+test:
+  only:
+    - master
+    - merge_requests
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: cobertura.xml
+    expire_in: "14 days"
+  coverage: '/Total:\s+\d+\.\d+\s+%/'
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /application
+    - vendor/bin/phpcs
+    - php artisan test --coverage --min=80
+    - cp cobertura.xml $CI_PROJECT_DIR

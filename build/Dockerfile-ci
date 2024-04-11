@@ -1,0 +1,25 @@
+FROM php:8.2
+
+RUN \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    apt update && apt install -y zip libgd-dev && \
+    pecl install pcov && docker-php-ext-enable pcov && \
+    docker-php-ext-configure gd --with-external-gd && \
+    docker-php-ext-install -j 2 exif gd
+
+WORKDIR /application
+
+ADD .env.example .env
+ADD composer.json composer.lock  ./
+
+RUN composer install --dev --no-scripts
+
+COPY . ./
+
+RUN composer install --dev
+
+RUN \
+    php artisan key:generate && \
+    php artisan jwt:secret && \
+    php artisan storage:link
+

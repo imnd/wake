@@ -1,0 +1,1411 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register user",
+                "description": "Register new user",
+                "operationId": "register",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/me/session": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User login",
+                "description": "User login",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "type": "User"
+                                        },
+                                        "authorization": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYm91cWV0L2FwaS92MS91c2Vycy9tZS9zZXNzaW9uIiwiaWF0IjoxNzEwOTAzOTgyLCJleHAiOjE3MTA5MDc1ODIsIm5iZiI6MTcxMDkwMzk4MiwianRpIjoiNXduZ3ZzMUp1ZVA2WDcwaiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.Wci1wDugk51QydQRgcBR9XHJ5j6OkjSMmZ7eSkZUGt0"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "bearer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User logout",
+                "description": "User logout",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/user/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh token",
+                "description": "Refresh token",
+                "operationId": "refresh",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYm91cWV0L2FwaS92MS91c2Vycy9tZS9zZXNzaW9uIiwiaWF0IjoxNzEwOTAzOTgyLCJleHAiOjE3MTA5MDc1ODIsIm5iZiI6MTcxMDkwMzk4MiwianRpIjoiNXduZ3ZzMUp1ZVA2WDcwaiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.Wci1wDugk51QydQRgcBR9XHJ5j6OkjSMmZ7eSkZUGt0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquet-types": {
+            "get": {
+                "tags": [
+                    "Bouquet types"
+                ],
+                "summary": "Get all bouquet types",
+                "description": "Get all bouquet types",
+                "operationId": "get-bouquet-types",
+                "responses": {
+                    "200": {
+                        "description": "Bouquet types list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BouquetTypeResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/bouquets": {
+            "get": {
+                "tags": [
+                    "Bouquets"
+                ],
+                "summary": "Get memorial bouquets",
+                "description": "Get memorial bouquets",
+                "operationId": "get-bouquets",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of bouquets",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BouquetResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Bouquets"
+                ],
+                "summary": "Create bouquet",
+                "description": "Create memorial bouquet",
+                "operationId": "create-bouquet",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "condolences",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}": {
+            "put": {
+                "tags": [
+                    "Bouquets"
+                ],
+                "summary": "Update bouquet",
+                "description": "Update bouquet",
+                "operationId": "update-bouquet",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "condolences",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "paid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BouquetResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/media/{MEDIA_ID}": {
+            "delete": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Delete medium",
+                "description": "Delete medium",
+                "operationId": "destroy-medium",
+                "parameters": [
+                    {
+                        "name": "MEDIA_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/media": {
+            "get": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Get all memorial media",
+                "description": "Get all memorial media",
+                "operationId": "get-memorial-media",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Upload media",
+                "description": "Upload media to given memorial",
+                "operationId": "upload-media",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "files",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "array[file]"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully uploaded"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/video": {
+            "get": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Get memorial videos",
+                "description": "Get memorial videos",
+                "operationId": "get-memorial-videos",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/images": {
+            "get": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Get memorial images",
+                "description": "Get memorial images",
+                "operationId": "get-memorial-images",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/media/{MEDIUM_ID}": {
+            "delete": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Delete medium",
+                "description": "Delete medium",
+                "operationId": "destroy-memorial-medium",
+                "parameters": [
+                    {
+                        "name": "MEDIUM_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorial/{MEMORIAL_ID}/media": {
+            "delete": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Delete memorial media",
+                "description": "Delete all memorial media",
+                "operationId": "destroy-memorial-media",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/media": {
+            "post": {
+                "tags": [
+                    "Bouquets"
+                ],
+                "summary": "Upload medium",
+                "description": "Upload medium to given bouquet",
+                "operationId": "upload-medium",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MediaResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{USER_ID}/memorials": {
+            "get": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Get user memorials",
+                "description": "Get user memorials",
+                "operationId": "get-memorials",
+                "parameters": [
+                    {
+                        "name": "USER_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ShortMemorialResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}": {
+            "get": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Get memorial info",
+                "description": "Get memorial info",
+                "operationId": "get-memorial",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShortMemorialResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Update memorial",
+                "description": "Update memorial",
+                "operationId": "update-memorial",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShortMemorialResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Change memorial status",
+                "description": "Change memorial status",
+                "operationId": "change-memorial-status",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials": {
+            "post": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Create memorial",
+                "description": "Create memorial",
+                "operationId": "create-memorial",
+                "parameters": [
+                    {
+                        "name": "default",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorial/{MEMORIAL_ID}": {
+            "delete": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Delete memorial",
+                "description": "Delete all memorial",
+                "operationId": "destroy-memorial",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/avatar": {
+            "post": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Upload memorial avatar",
+                "description": "Upload memorial avatar",
+                "operationId": "upload-memorial-avatar",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/me": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get short user details",
+                "description": "Get short user details",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/schemas/ShortUserResource"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{ID}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get full user details",
+                "description": "Get full user details",
+                "operationId": "details",
+                "parameters": [
+                    {
+                        "name": "ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 11
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Vladimir Putin"
+                                        },
+                                        "avatar": {
+                                            "type": "string",
+                                            "example": "http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user",
+                "description": "Update user",
+                "operationId": "update-user",
+                "parameters": [
+                    {
+                        "name": "ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Disable user",
+                "description": "Disable user",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{ID}/avatar": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Upload user avatar",
+                "description": "Upload user avatar",
+                "operationId": "upload-user-avatar",
+                "parameters": [
+                    {
+                        "name": "ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BouquetResource": {
+                "properties": {
+                    "id": {
+                        "type": "int8",
+                        "example": "53"
+                    },
+                    "condolences": {
+                        "type": "string",
+                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel libero leo. Fusce vitae laoreet nisi. Cras faucibus ullamcorper sagittis. Donec ac magna a nunc faucibus congue sed non ante."
+                    },
+                    "from": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "unpaid"
+                    },
+                    "memorial": {
+                        "$ref": "#/components/schemas/ShortMemorialResource"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/BouquetTypeResource"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "BouquetResource"
+                }
+            },
+            "BouquetTypeResource": {
+                "properties": {
+                    "id": {
+                        "type": "int8",
+                        "example": "53"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "White Lilies"
+                    },
+                    "price": {
+                        "type": "string",
+                        "example": "15.0"
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "/storage/app/public/bouquet-types/r-p.png"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "BouquetTypeResource"
+                }
+            },
+            "MediaResource": {
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "example": "dc9b0882-2f6f-4164-823d-ad2b0b8decb9"
+                    },
+                    "file_name": {
+                        "type": "string",
+                        "example": "FLS4yzPIjW1I1PkC1uymrulxBUcrXyHl7xiDuEpm.jpg"
+                    },
+                    "mime_type": {
+                        "type": "string",
+                        "example": "application/json"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MediaResource"
+                }
+            },
+            "FullMemorialResource": {
+                "type": "object",
+                "xml": {
+                    "name": "ShortMemorialResource"
+                },
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ShortMemorialResource"
+                    },
+                    {
+                        "properties": {
+                            "id": {
+                                "type": "int8",
+                                "example": "53"
+                            },
+                            "title": {
+                                "type": "string",
+                                "example": "Lorem ipsum"
+                            },
+                            "first_name": {
+                                "type": "string",
+                                "example": "John"
+                            },
+                            "middle_name": {
+                                "type": "string",
+                                "example": "Fitzgerald"
+                            },
+                            "last_name": {
+                                "type": "string",
+                                "example": "Doe"
+                            },
+                            "place_of_birth": {
+                                "type": "string",
+                                "example": "New York City"
+                            },
+                            "place_of_death": {
+                                "type": "string",
+                                "example": "Concord"
+                            },
+                            "day_of_birth": {
+                                "type": "string",
+                                "example": "2012-12-12T00:00:00.000000Z"
+                            },
+                            "day_of_death": {
+                                "type": "string",
+                                "example": "2012-12-13T00:00:00.000000Z"
+                            },
+                            "text": {
+                                "type": "string",
+                                "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel libero leo."
+                            },
+                            "default": {
+                                "type": "boolean",
+                                "example": "true"
+                            },
+                            "status": {
+                                "type": "string",
+                                "example": "published"
+                            },
+                            "user": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ShortUserResource"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "ShortMemorialResource": {
+                "properties": {
+                    "id": {
+                        "type": "int8",
+                        "example": "53"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Lorem ipsum"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "middle_name": {
+                        "type": "string",
+                        "example": "Fitzgerald"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "place_of_birth": {
+                        "type": "string",
+                        "example": "New York City"
+                    },
+                    "place_of_death": {
+                        "type": "string",
+                        "example": "Concord"
+                    },
+                    "day_of_birth": {
+                        "type": "string",
+                        "example": "2012-12-12T00:00:00.000000Z"
+                    },
+                    "day_of_death": {
+                        "type": "string",
+                        "example": "2012-12-13T00:00:00.000000Z"
+                    },
+                    "text": {
+                        "type": "string",
+                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel libero leo."
+                    },
+                    "default": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "published"
+                    },
+                    "user": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ShortUserResource"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ShortMemorialResource"
+                }
+            },
+            "FullUserResource": {
+                "type": "object",
+                "xml": {
+                    "name": "FullUserResource"
+                },
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ShortUserResource"
+                    },
+                    {
+                        "properties": {
+                            "id": {
+                                "type": "int8",
+                                "example": "53"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "John Doe"
+                            },
+                            "avatar": {
+                                "type": "string",
+                                "example": "http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg"
+                            },
+                            "memorial": {
+                                "type": "int8",
+                                "example": "35"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "ShortUserResource": {
+                "properties": {
+                    "id": {
+                        "type": "int8",
+                        "example": "53"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "avatar": {
+                        "type": "string",
+                        "example": "http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg"
+                    },
+                    "memorial": {
+                        "type": "int8",
+                        "example": "35"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ShortUserResource"
+                }
+            }
+        },
+        "responses": {
+            "401": {
+                "description": "Unauthorized"
+            },
+            "404": {
+                "description": "Not found"
+            }
+        }
+    }
+}
