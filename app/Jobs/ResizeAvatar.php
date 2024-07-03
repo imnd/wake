@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Traits\MediaServiceTrait;
+use App\Traits\MediaTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +19,7 @@ class ResizeAvatar implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use MediaServiceTrait;
+    use MediaTrait;
 
     private Model $model;
     private string $fileName;

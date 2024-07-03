@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Bouquet\BouquetTypeResource;
-use App\Models\Memorial;
 use App\Services\BouquetTypeService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;

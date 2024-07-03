@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\Bouquet;
 
+use App\Traits\MediaTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(
@@ -18,13 +18,16 @@ use Illuminate\Support\Facades\Storage;
  */
 class BouquetTypeResource extends JsonResource
 {
+    use MediaTrait;
+
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
             'priority' => $this->priority,
-            'image' => Storage::disk('public')->path("bouquet-types/{$this->image}"),
+            'image' => $this->getDisk()->url("bouquet-types/{$this->image}"),
         ];
     }
 }

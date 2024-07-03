@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Bouquets\CreateRequest;
 use App\Http\Requests\Bouquets\UpdateRequest;
 use App\Http\Resources\Bouquet\BouquetResource;
+use App\Http\Resources\Bouquet\PaymentResource;
 use App\Models\Bouquet;
 use App\Models\Memorial;
 use App\Services\BouquetService;
@@ -79,6 +80,7 @@ class BouquetsController extends Controller
      *           type="integer"
      *         )
      *     ),
+     *
      *     @OA\Parameter(
      *         in="query",
      *         name="condolences",
@@ -89,10 +91,34 @@ class BouquetsController extends Controller
      *     ),
      *     @OA\Parameter(
      *         in="query",
+     *         name="anonymous",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="boolean"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
      *         name="from",
      *         required=true,
      *         @OA\Schema(
      *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="status",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="type_id",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer"
      *         )
      *     ),
      *
@@ -149,10 +175,19 @@ class BouquetsController extends Controller
      *           type="integer"
      *         )
      *     ),
+     *
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="anonymous",
+     *         required=false,
+     *         @OA\Schema(
+     *              type="boolean"
+     *         ),
+     *     ),
      *     @OA\Parameter(
      *         in="query",
      *         name="condolences",
-     *         required=false,
+     *         required=true,
      *         @OA\Schema(
      *           type="string"
      *         )
@@ -160,6 +195,14 @@ class BouquetsController extends Controller
      *     @OA\Parameter(
      *         in="query",
      *         name="from",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="status",
      *         required=false,
      *         @OA\Schema(
      *           type="string"
@@ -167,10 +210,10 @@ class BouquetsController extends Controller
      *     ),
      *     @OA\Parameter(
      *         in="query",
-     *         name="paid",
-     *         required=false,
+     *         name="type_id",
+     *         required=true,
      *         @OA\Schema(
-     *           type="boolean"
+     *           type="integer"
      *         )
      *     ),
      *
@@ -204,5 +247,56 @@ class BouquetsController extends Controller
         $service->update($request, $bouquet);
 
         return $this->responseOk(new BouquetResource($bouquet));
+    }
+
+    /**
+     * Get bouquet payment info
+     *
+     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/v1/bouquets/{BOUQUET_ID}/payment-info",
+     *     summary="Get bouquet payment info",
+     *     description="Get bouquet payment info",
+     *     operationId="get-bouquet-payment-info",
+     *     tags={"Bouquets"},
+     *
+     *     @OA\SecurityScheme(
+     *         securityScheme="Bearer",
+     *         type="apiKey",
+     *         name="Authorization",
+     *         in="header"
+     *     ),
+     *
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="BOUQUET_ID",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(ref="#/components/schemas/PaymentResource"),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not found"
+     *     )
+     * )
+     */
+    public function paymentInfo(Bouquet $bouquet): ?JsonResponse
+    {
+        if ($bouquet->user_id !== Auth::id()) {
+            return $this->responseForbidden();
+        }
+
+        return $this->responseOk(new PaymentResource($bouquet));
     }
 }

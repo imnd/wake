@@ -19,6 +19,7 @@ build-ci-image:
   only:
     - master
     - merge_requests
+
   script:
     - docker build -t b-ouquet-ci:$CI_COMMIT_SHA -f build/Dockerfile-ci .
     - docker tag b-ouquet-ci:$CI_COMMIT_SHA b-ouquet-ci:latest
@@ -31,8 +32,8 @@ cleanup-ci-image:
   when: always
   allow_failure: true
   only:
-  - master
-  - merge_requests
+    - master
+    - merge_requests
   variables:
     GIT_STRATEGY: none
   script:

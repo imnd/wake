@@ -1,9 +1,9 @@
 <?php
 
+use App\Helpers\Statuses;
 use App\Models\Bouquet;
 use App\Models\BouquetType;
 use App\Models\Memorial;
-use App\Traits\MediaServiceTrait;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -12,9 +12,8 @@ use Tests\TestCase;
  */
 class BouquetsTest extends TestCase
 {
-    use MediaServiceTrait;
-
     private Memorial $memorial;
+
     private Bouquet $bouquet;
 
     /**
@@ -27,11 +26,6 @@ class BouquetsTest extends TestCase
         $this->memorial = Memorial::factory()->create($this->getMemorialData());
 
         $this->bouquet = Bouquet::factory()->create($this->getBouquetData($this->memorial));
-
-        $uploadPath = $this->putToStorage('bouquet', $this->getVideo());
-        $this->bouquet
-            ->addMedia($this->getStoragePath($uploadPath))
-            ->toMediaCollection();
 
         Bouquet::factory()
             ->count(4)
@@ -81,29 +75,7 @@ class BouquetsTest extends TestCase
         $this->putRequest(['update', $this->bouquet->id], [
             'condolences' => $this->faker->text(128),
             'from' => $this->faker->firstName . ' ' . fake()->lastName,
-            'status' => $this->faker->randomElement([Bouquet::STATUS_PAID, Bouquet::STATUS_UNPAID]),
+            'status' => $this->faker->randomElement([Statuses::STATUS_PAID, Statuses::STATUS_UNPAID]),
         ], Response::HTTP_OK);
-    }
-
-    /**
-     * @test
-     */
-    public function can_upload_medium()
-    {
-        $this->prefix = 'bouquets';
-        $this->postRequest(
-            ['upload-medium', $this->bouquet->id],
-            $this->getVideoUploadParams(),
-            Response::HTTP_OK
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function can_delete_medium()
-    {
-        $this->prefix = 'media';
-        $this->deleteRequest(['delete', $this->bouquet->media()->first()->id]);
     }
 }

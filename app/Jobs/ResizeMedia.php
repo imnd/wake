@@ -2,13 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Traits\MediaServiceTrait;
+use App\Models\Bouquet;
+use App\Models\Memorial;
+use App\Traits\MediaTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ResizeMedia implements ShouldQueue
 {
@@ -16,14 +18,14 @@ class ResizeMedia implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-    use MediaServiceTrait;
+    use MediaTrait;
 
-    private Model $model;
+    private Bouquet | Memorial $model;
     private string $uploadPath;
     private string $mimeType;
 
     public function __construct(
-        Model $model,
+        Bouquet | Memorial $model,
         string $uploadPath,
         string $mimeType,
     ) {
@@ -35,13 +37,23 @@ class ResizeMedia implements ShouldQueue
     public function handle(): void
     {
         $mimeType = substr($this->mimeType, 0, strpos($this->mimeType, '/'));
+        $path = $this->getStoragePath($this->uploadPath);
 
-        $this->model
-            ->addMedia($this->getStoragePath($this->uploadPath))
+        $previewMedia = $this->model
+            ->addMedia($path)
             ->preservingOriginal()
             ->toMediaCollection("$mimeType-preview");
+
+        if ($mimeType === 'image') {
+            list($width, $height) = getimagesize($path);
+            $previewMedia->update([
+                'original_width' => $width,
+                'original_height' => $height
+            ]);
+        }
+
         $this->model
-            ->addMedia($this->getStoragePath($this->uploadPath))
+            ->addMedia($path)
             ->preservingOriginal()
             ->toMediaCollection("$mimeType-thumb");
     }

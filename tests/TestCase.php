@@ -4,9 +4,14 @@ namespace Tests;
 
 use App\Models\Memorial;
 use App\Models\User;
+use App\Services\PaymentService;
+use DateInterval;
+use DateTime;
 use Illuminate\Http\Response;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Testing\TestResponse;
+use Stripe\Customer;
 use Illuminate\Foundation\Testing\{
     TestCase as BaseTestCase,
     WithFaker,
@@ -20,7 +25,10 @@ abstract class TestCase extends BaseTestCase
     use WithFaker;
 
     protected User $user;
+    protected bool $guest = false;
+
     protected string $prefix = '';
+    protected ?Customer $customer;
 
     /**
      * @inheritdoc
@@ -34,75 +42,119 @@ abstract class TestCase extends BaseTestCase
         $this->user = User::factory()->create([
             'is_admin' => true,
         ]);
+        $paymentService = new PaymentService();
+        $this->customer = $paymentService->createCustomer([
+            'name'  => $this->faker->firstName,
+            'email' => $this->user->email
+        ]);
+
         $this->withoutExceptionHandling();
     }
 
+    protected function asGuest(): static
+    {
+        $this->guest = true;
+        return $this;
+    }
+
+    protected const METHOD_GET = 'get';
+    protected const METHOD_POST = 'post';
+    protected const METHOD_PUT = 'put';
+    protected const METHOD_PATCH = 'patch';
+    protected const METHOD_DELETE = 'delete';
+
     protected function getRequest(
-        array $routeParams,
+        mixed $routeParams,
         mixed $queryParams = [],
         int $status = null
     ): array {
-        return $this->getRequestResult('get', $routeParams, $queryParams, $status);
+        return $this->getRequestResult(self::METHOD_GET, $routeParams, $queryParams, $status);
     }
 
     protected function postRequest(
-        array $routeParams,
+        mixed $routeParams,
         mixed $queryParams = [],
         int $status = null
     ): array {
-        return $this->getRequestResult('post', $routeParams, $queryParams, $status);
+        return $this->getRequestResult(self::METHOD_POST, $routeParams, $queryParams, $status);
     }
 
     protected function putRequest(
-        array $routeParams,
+        mixed $routeParams,
         mixed $queryParams = [],
         int $status = null
     ): array {
-        return $this->getRequestResult('put', $routeParams, $queryParams, $status);
+        return $this->getRequestResult(self::METHOD_PUT, $routeParams, $queryParams, $status);
     }
 
     protected function patchRequest(
-        array $routeParams,
+        mixed $routeParams,
         mixed $queryParams = [],
         int $status = null
     ): array {
-        return $this->getRequestResult('patch', $routeParams, $queryParams, $status);
+        return $this->getRequestResult(self::METHOD_PATCH, $routeParams, $queryParams, $status);
     }
 
     protected function deleteRequest(
-        array $routeParams,
+        mixed $routeParams,
         mixed $queryParams = [],
         int $status = null
     ): array {
-        return $this->getRequestResult('delete', $routeParams, $queryParams, $status);
+        return $this->getRequestResult(self::METHOD_DELETE, $routeParams, $queryParams, $status);
     }
+
+    // Expected HTTP status code
+    protected const SUCCESS_STATUSES = [
+        self::METHOD_GET => Response::HTTP_OK,
+        self::METHOD_POST => Response::HTTP_CREATED,
+        self::METHOD_PUT => Response::HTTP_NO_CONTENT,
+        self::METHOD_PATCH => Response::HTTP_NO_CONTENT,
+        self::METHOD_DELETE => Response::HTTP_NO_CONTENT,
+    ];
 
     protected function getRequestResult(
         string $method,
-        array $routeParams = [],
+        mixed $routeParams = [],
         mixed $queryParams = [],
-        int $status = null
-    ): array {
-        $route = $this->getRoute(...$routeParams);
+        int $status = null,
+    ) {
+        $response = $this->getRequestResponse($method, $routeParams, $queryParams, $status);
+
+        return $response?->json() ?: [];
+    }
+
+    protected function getRequestResponse(
+        string $method,
+        mixed $routeParams = [],
+        mixed $queryParams = [],
+        int &$status = null,
+    ) {
+        $route = $this->getRoute(...(array)$routeParams);
 
         if (is_integer($queryParams)) {
             $status = $queryParams;
             $queryParams = [];
         }
-        // Expected HTTP status code
+
         if (is_null($status)) {
-            $status = [
-                'get' => Response::HTTP_OK,
-                'post' => Response::HTTP_CREATED,
-                'put' => Response::HTTP_NO_CONTENT,
-                'patch' => Response::HTTP_NO_CONTENT,
-                'delete' => Response::HTTP_NO_CONTENT,
-            ][$method] ?? Response::HTTP_OK;
+            $status = self::SUCCESS_STATUSES[$method] ?? Response::HTTP_OK;
+        }
+
+        if (in_array($status, self::SUCCESS_STATUSES)) {
+            $this->withoutExceptionHandling();
+        } else {
+            $this->withExceptionHandling();
         }
 
         $method = "{$method}Json";
-        $response = $this
-            ->actingAs($this->user, 'api')
+
+        $response = $this;
+        if (!$this->guest) {
+            $response = $response
+                ->actingAs($this->user, 'api');
+        }
+
+        $response = $response
             ->$method(
                 $route,
                 $queryParams
@@ -110,18 +162,24 @@ abstract class TestCase extends BaseTestCase
 
         $response->assertStatus($status);
 
-        return $status === Response::HTTP_NO_CONTENT ? [] : $response->json();
+        return $status === Response::HTTP_NO_CONTENT ? null : $response;
     }
 
-    protected function getRoute(string $action, mixed $params = []): string
+    protected function getRoute(string $action, mixed $params = [], $path = 'api.v1'): string
     {
-        $path = 'api.v1';
-
         if ($this->prefix) {
-            $path .= ".{$this->prefix}";
+            if ($path !== '') {
+                $path .= '.';
+            }
+            $path .= "{$this->prefix}";
         }
 
-        return route("$path.$action", $params);
+        if ($path !== '') {
+            $path .= '.';
+        }
+        $path .= $action;
+
+        return route($path, $params);
     }
 
     # FAKE DATA FOR TESTING
@@ -142,8 +200,10 @@ abstract class TestCase extends BaseTestCase
             ][$this->faker->numberBetween(0, 2)],
             'place_of_birth' => $this->faker->address,
             'place_of_death' => $this->faker->address,
-            'day_of_birth' => $this->faker->date,
-            'day_of_death' => $this->faker->date,
+            'day_of_birth' => $dayOfBirth = $this->faker->date,
+            'day_of_death' => (new DateTime($dayOfBirth))
+                ->add(DateInterval::createFromDateString('30 years'))
+                ->format('Y-m-d'),
         ];
     }
 

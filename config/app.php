@@ -176,7 +176,6 @@ return [
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
@@ -189,6 +188,7 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Auth\PasswordResetServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
 
@@ -207,7 +207,10 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-    ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
+
+    'payment' => [
+        'currency' => 'usd',
+    ],
 
 ];

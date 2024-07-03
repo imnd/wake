@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Bouquet;
+use App\Helpers\Statuses;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,7 +15,7 @@ class BouquetFactory extends Factory
         return [
             'condolences' => fake()->text(128),
             'from' => fake()->firstName . ' ' . fake()->lastName,
-            'status' => Bouquet::STATUS_PAID,
+            'status' => Statuses::STATUS_PAID,
         ];
     }
 }

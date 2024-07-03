@@ -3,32 +3,41 @@
 namespace App\Models;
 
 use App\Traits\MediaModelTrait;
-use Illuminate\Database\Eloquent\Builder;
+use App\Traits\PaidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\MediaLibrary\MediaCollections\Models\Media as SpatieMedia;
 use Spatie\MediaLibrary\{
     HasMedia,
-    InteractsWithMedia,
+    InteractsWithMedia
 };
+use Spatie\MediaLibrary\MediaCollections\Models\Media as SpatieMedia;
 
 class Bouquet extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
     use MediaModelTrait;
+    use PaidTrait;
 
-    public const STATUS_PAID = 'paid';
-    public const STATUS_UNPAID = 'unpaid';
+    public const MAX_MEDIA = 3;
 
     protected $fillable = [
+        'type_id',
         'user_id',
         'memorial_id',
-        'type_id',
+        'anonymous',
         'condolences',
         'from',
         'status',
+        'payment_intent_id',
+        'payment_method',
+        'amount',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'anonymous'  => 'boolean',
     ];
 
     public function registerMediaConversions(SpatieMedia $media = null): void
@@ -48,13 +57,8 @@ class Bouquet extends Model implements HasMedia
         return $this->belongsTo(BouquetType::class, 'type_id');
     }
 
-    public function memorial()
+    public function memorial(): BelongsTo
     {
         return $this->belongsTo(Memorial::class);
-    }
-
-    public function scopePaid(Builder $query): void
-    {
-        $query->where('status', self::STATUS_PAID);
     }
 }

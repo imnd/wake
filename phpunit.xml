@@ -18,6 +18,8 @@
     <env name="QUEUE_CONNECTION" value="sync"/>
     <env name="SESSION_DRIVER" value="array"/>
     <env name="TELESCOPE_ENABLED" value="false"/>
+    <env name="STRIPE_KEY" value="pk_test_51P5k3TP9mMWS8EX7EgEo7VOhPcpBLfHh7kaMHzNpmiloKbckI542sGUybALT7oFMldLzKV6FbdicM4EWIq6bjdzn00RrlvTJTX"/>
+    <env name="STRIPE_SECRET" value="sk_test_51P5k3TP9mMWS8EX7cZUwIahovsqz7ZsALCJ9oUd1CLDNhv1qOVQ7G753317fckVkIeUC7wm94WH566y21goU0Wpu00aUASUjLe"/>
   </php>
   <source>
     <include>

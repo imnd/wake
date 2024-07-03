@@ -2,27 +2,26 @@
 
 namespace App\Models;
 
+use App\Helpers\Statuses;
+use App\Helpers\Str;
 use App\Traits\MediaModelTrait;
+use App\Traits\PaidTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia,};
 use Spatie\MediaLibrary\MediaCollections\Models\Media as SpatieMedia;
-use Spatie\MediaLibrary\{
-    HasMedia,
-    InteractsWithMedia,
-};
 
 class Memorial extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
     use MediaModelTrait;
+    use PaidTrait;
 
-    public const STATUS_PUBLISHED = 'published';
-    public const STATUS_ARCHIVED = 'archived';
-    public const STATUS_DELETED = 'deleted';
     public const GENDER_MALE = 'male';
     public const GENDER_FEMALE = 'female';
     public const GENDER_OTHER = 'other';
@@ -42,6 +41,9 @@ class Memorial extends Model implements HasMedia
         'default',
         'status',
         'avatar',
+        'uuid',
+        'goal_sum',
+        'payment_intent_id',
     ];
 
     protected $casts = [
@@ -50,14 +52,23 @@ class Memorial extends Model implements HasMedia
         'day_of_death' => 'date',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+    }
+
     public function registerMediaConversions(SpatieMedia $media = null): void
     {
         $this->addMediaConversions('memorial');
     }
 
-    public function isPublished(): bool
+    public function setMiddleNameAttribute($value)
     {
-        return $this->status === self::STATUS_PUBLISHED;
+        $this->attributes['middle_name'] = $value ?: '';
     }
 
     # SCOPES
@@ -67,17 +78,17 @@ class Memorial extends Model implements HasMedia
         $query->where('default', true);
     }
 
-    public function scopePublished(Builder $query): void
-    {
-        $query->where('status', self::STATUS_PUBLISHED);
-    }
-
     public function scopeNotDeleted(Builder $query): void
     {
-        $query->where('status', '<>', self::STATUS_DELETED);
+        $query->where('status', '<>', Statuses::STATUS_DELETED);
     }
 
     # RELATIONS
+
+    public function viewers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 
     public function author(): BelongsTo
     {
@@ -91,6 +102,6 @@ class Memorial extends Model implements HasMedia
 
     public function paidBouquets(): HasMany
     {
-        return $this->bouquets()->where('status', Bouquet::STATUS_PAID);
+        return $this->bouquets()->paid();
     }
 }

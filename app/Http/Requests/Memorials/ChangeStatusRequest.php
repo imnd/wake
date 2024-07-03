@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Memorials;
 
-use App\Models\Memorial;
+use App\Helpers\Statuses;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,9 +23,10 @@ class ChangeStatusRequest extends FormRequest
                 'required',
                 'string',
                 Rule::in([
-                    Memorial::STATUS_PUBLISHED,
-                    Memorial::STATUS_ARCHIVED,
-                    Memorial::STATUS_DELETED,
+                    Statuses::STATUS_PAID,
+                    Statuses::STATUS_UNPAID,
+                    Statuses::STATUS_ARCHIVED,
+                    Statuses::STATUS_DELETED,
                 ]),
             ],
         ];

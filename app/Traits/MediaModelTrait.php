@@ -13,7 +13,7 @@ trait MediaModelTrait
             ->addMediaConversion('image-thumb')
             ->quality(config('media-library.conversions.image_quality'))
             ->fit(
-                Fit::Contain,
+                Fit::Crop,
                 config("media-library.conversions.$disk.image.thumb.width"),
                 config("media-library.conversions.$disk.image.thumb.height")
             )
@@ -23,7 +23,7 @@ trait MediaModelTrait
             ->addMediaConversion('image-preview')
             ->quality(config('media-library.conversions.image_quality'))
             ->fit(
-                Fit::Contain,
+                Fit::Crop,
                 config("media-library.conversions.$disk.image.preview.width"),
                 config("media-library.conversions.$disk.image.preview.height")
             )
@@ -46,31 +46,28 @@ trait MediaModelTrait
     {
         return $this
             ->getVideos()
-            ->merge(
-                $this->getImages()
-            );
+            ->merge($this->getImages());
     }
 
     public function getVideos(): Collection
     {
         return $this
             ->getMedia('video-preview')
-            ->merge(
-                $this->getMedia('video-thumb')
-            );
+            ->merge($this->getMedia('video-thumb'));
     }
 
     public function getImages(): Collection
     {
         return $this
             ->getImagePreviews()
-            ->merge(
-                $this->getMedia('image-thumb')
-            );
+            ->merge($this->getMedia('image-thumb'))
+        ;
     }
 
     public function getImagePreviews(): Collection
     {
-        return $this->getMedia('image-preview');
+        return $this
+            ->getMedia('image-preview')
+        ;
     }
 }

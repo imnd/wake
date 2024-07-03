@@ -1,0 +1,346 @@
+@media (max-width: 1117px) {
+  body {
+    width: 100%;
+  }
+  .a-Btn {
+    height: 54px;
+    line-height: 54px;
+    border-radius: 16px;
+    padding-top: 2vw;
+    padding-bottom: 2vw;
+    font-weight: 500;
+    font-size: 4.2vw;
+  }
+  header {
+    padding-top: 0;
+  }
+  header .container {
+    display: none;
+  }
+  .person-card-section {
+    padding-top: 0;
+  }
+  .person-card-section .person-card {
+    display: flex;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    min-width: unset;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .person-card-section .person-card .person-image {
+    width: 100%;
+    min-height: 30rem;
+  }
+  .person-card-section .person-card .person-image img {
+    width: 100%;
+  }
+  .person-card-section .person-card .person-data {
+    padding: 0;
+    margin-top: -30rem;
+    width: 100%;
+  }
+  .person-card-section .person-card .person-data .in-memory {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+    width: 100%;
+    padding-bottom: 13rem;
+    color: white;
+  }
+  .person-card-section .person-card .person-data .in-memory .title {
+    font-size: 3.5vw;
+    margin-left: 4rem;
+    margin-top: 1rem;
+  }
+  .person-card-section .person-card .person-data .in-memory .name {
+    font-size: 9.7vw;
+    margin-bottom: 1rem;
+    margin-left: 3rem;
+    width: 80%;
+  }
+  .person-card-section .person-card .person-data .in-memory time {
+    font-size: 5vw;
+    margin-left: 3rem;
+    margin-top: unset;
+  }
+  .person-card-section .person-card .person-data .timeline {
+    padding-top: 6vw;
+    padding-bottom: 8vw;
+    margin-top: -7rem;
+    margin-left: 0;
+    width: 100%;
+    background-color: #fff;
+  }
+  .person-card-section .person-card .person-data .timeline ul {
+    margin-top: 4rem;
+  }
+  .person-card-section .person-card .person-data .timeline ul li {
+    margin-left: 4rem;
+    padding-right: 4rem;
+    border-left: 1px solid #000;
+    padding-bottom: 4rem;
+  }
+  .person-card-section .person-card .person-data .timeline ul li:before {
+    width: 20px;
+    height: 20px;
+    margin-left: -2rem;
+    box-shadow: 0 0 0 10px #ffffff;
+  }
+  .person-card-section .person-card .person-data .timeline ul li span {
+    font-size: 3.1vw;
+    line-height: 4vw;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+    margin-left: 2rem;
+  }
+  .person-card-section .person-card .person-data .timeline .a-Btn {
+    margin-top: 4rem;
+    margin-right: 3rem;
+    margin-bottom: 5rem;
+    margin-left: 3rem;
+  }
+  .personal-note-section .personal-note-bar {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 3.8rem;
+    margin-right: 3.8rem;
+    padding-top: 0;
+    padding-bottom: 10rem;
+    width: unset;
+    min-width: unset;
+  }
+  .personal-note-section .personal-note-bar > div,
+  .personal-note-section .personal-note-bar div:nth-child(2) {
+    width: 100%;
+    display: grid;
+    justify-items: end;
+  }
+  .personal-note-section .personal-note-bar .family-note {
+    width: unset;
+    padding-top: 12.5rem;
+    padding-bottom: 3rem;
+    max-width: unset;
+  }
+  .personal-note-section .personal-note-bar .family-note .note-title {
+    font-size: 6.5vw;
+    line-height: 9vw;
+  }
+  .personal-note-section .personal-note-bar .family-note .note-text {
+    margin-top: 4rem;
+    width: unset;
+    font-size: 2rem;
+    line-height: 3.4rem;
+    letter-spacing: -0.25px;
+  }
+  .personal-note-section .personal-note-bar .pictures {
+    width: 100%;
+    position: unset;
+    display: unset;
+    right: unset;
+  }
+  .personal-note-section .personal-note-bar .pictures .pictures-content {
+    margin-bottom: -52rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 25% 20% 25%;
+    grid-gap: 0.55rem;
+    justify-items: end;
+  }
+  .personal-note-section .personal-note-bar .pictures .pictures-content .picture:nth-child(1) {
+    order: 1;
+    grid-column: span 3;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .personal-note-section .personal-note-bar .pictures .pictures-content .picture:nth-child(2) {
+    order: 3;
+    grid-column: span 2;
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
+  }
+  .personal-note-section .personal-note-bar .pictures .pictures-content .picture:nth-child(3) {
+    order: 2;
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
+  }
+  .personal-note-section .personal-note-bar .pictures .pictures-content .picture:nth-child(4) {
+    order: 4;
+    grid-column: span 3;
+    grid-row: 3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .flowers-section .flowers-bar {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 3rem;
+    margin-right: 3rem;
+    width: unset;
+    min-width: unset;
+  }
+  .flowers-section .flowers-bar > div {
+    width: unset;
+  }
+  .flowers-section .flowers-bar .flowers-note {
+    width: unset;
+    margin-bottom: 10vw;
+    margin-right: 0;
+  }
+  .flowers-section .flowers-bar .flowers-note a {
+    text-decoration: none;
+    color: #000000;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    column-gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .flowers-section .flowers-bar .flowers-note a img {
+    width: 5rem;
+  }
+  .flowers-section .flowers-bar .flowers-note a span {
+    font-weight: 600;
+    font-size: 4rem;
+    line-height: 3.5rem;
+    letter-spacing: -0.75px;
+  }
+  .flowers-section .flowers-bar .flowers-note .flowers-title {
+    font-size: 7vw;
+    line-height: 9vw;
+    align-items: center;
+  }
+  .flowers-section .flowers-bar .flowers-note .flowers-title img {
+    width: 10%;
+  }
+  .flowers-section .flowers-bar .flowers-note .flowers-title span {
+    margin-left: 3rem;
+    letter-spacing: -2px;
+  }
+  .flowers-section .flowers-bar .flowers-note .flowers-text {
+    font-size: 2.35rem;
+    line-height: 3.5rem;
+    letter-spacing: -0.75px;
+  }
+  .flowers-section .flowers-bar .flowers-list {
+    width: 100%;
+    margin-left: unset;
+    margin-bottom: 9vw;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card > div .a-Btn {
+    width: 100%;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-image {
+    width: 10rem;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-name-date {
+    margin-left: 3rem;
+    width: 55%;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-name-date .flower-nameText {
+    font-size: 2rem;
+    line-height: 3rem;
+    letter-spacing: 0;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-name-date .flower-date {
+    font-size: 2rem;
+    line-height: 3rem;
+    letter-spacing: -1px;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-type {
+    width: 9vw;
+  }
+  .flowers-section .flowers-bar .flowers-list .flowers-card .flower-line .flower-price {
+    margin-left: 1rem;
+    margin-right: 0.6rem;
+    font-size: 2rem;
+  }
+  .download-app-section {
+    max-height: 150rem;
+  }
+  .download-app-section .background {
+    position: relative;
+    overflow: hidden;
+  }
+  .download-app-section .background .background-img {
+    content: url(../../public/img/downloadapp_back_l.jpg);
+    position: absolute;
+    top: -35rem;
+    height: 125%;
+  }
+  .download-app-section .download-app-bar {
+    width: unset;
+    margin-left: 3.5rem;
+    margin-right: 3.5rem;
+  }
+  .download-app-section .download-app-bar div:nth-child(1) {
+    width: 0;
+    display: none;
+  }
+  .download-app-section .download-app-bar .download-app-info {
+    width: unset;
+    margin-top: 28vw;
+    margin-bottom: 100vw;
+    margin-left: 0;
+  }
+  .download-app-section .download-app-bar .download-app-info .download-app-info-title {
+    font-size: 12vw;
+    line-height: 20vw;
+    letter-spacing: -7px;
+  }
+  .download-app-section .download-app-bar .download-app-info .download-app-info-text {
+    font-size: 2rem;
+    line-height: 3.5rem;
+  }
+  .download-app-section .download-app-bar .download-app-info .download-app-info-buttons {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+  .download-app-section .download-app-bar .download-app-info .download-app-info-buttons a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4vw;
+    height: 11vw;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .download-app-section .download-app-bar .download-app-info .download-app-info-buttons a img {
+    width: 35%;
+  }
+  footer .footer-bar {
+    flex-direction: row;
+    justify-content: center;
+    width: unset;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: unset;
+  }
+  footer .footer-bar a {
+    width: 30%;
+  }
+  footer .footer-bar a img {
+    width: 100%;
+  }
+  footer .footer-bar div:nth-child(2) {
+    display: none;
+  }
+}
+/*# sourceMappingURL=media.css.map */

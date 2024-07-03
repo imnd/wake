@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\PaymentMethods;
+use App\Helpers\Statuses;
 use App\Models\Bouquet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,9 +14,13 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('memorial_id');
+            $table->unsignedSmallInteger('type_id')->nullable()->default(null);
             $table->text('condolences');
             $table->string('from');
-            $table->enum('status', [Bouquet::STATUS_UNPAID, Bouquet::STATUS_PAID])->default(Bouquet::STATUS_UNPAID);
+            $table->string('status', 10)->default(Statuses::STATUS_UNPAID);
+            $table->string('payment_intent_id')->nullable()->default(null);
+            $table->enum('payment_method', PaymentMethods::values())->nullable();
+            $table->float('amount')->nullable(false)->default(0);
             $table->softDeletes();
             $table->timestamps();
 

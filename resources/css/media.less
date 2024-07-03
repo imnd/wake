@@ -1,0 +1,535 @@
+@media (max-width: 1117px) {
+
+  .section-container {
+    padding: unset;
+  }
+
+  body {
+    width: 100%;
+  }
+
+  .a-Btn {
+    height: 54px;
+    line-height: 54px;
+
+    border-radius: 16px;
+    padding-top: 2vw;
+    padding-bottom: 2vw;
+    font-weight: 500;
+    font-size: 4.2vw;
+  }
+
+
+  //Header
+  header {
+    padding-top: 0;
+
+    //nav {
+    .container {
+      display: none;
+    }
+  }
+
+  //Information about person section
+  .person-card-section {
+    padding-top: 0;
+
+    //Person card
+    .person-card {
+      display: flex;
+      width: 100%;
+      height: auto;
+      flex-direction: column;
+      min-width: unset;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      //Person pictures
+      .person-image {
+        width: 100%;
+        min-height: 30rem;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      //Person information
+      .person-data {
+        padding: 0;
+        margin-top: -30rem;
+        width: 100%;
+
+        //Name / birth and death dates
+        .in-memory {
+          background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+          width: 100%;
+
+          padding-bottom: 13rem;
+
+          color: white;
+
+          //div {
+          //  margin-left: 3rem;
+          //  width: 80%;
+          //}
+
+          .title {
+            font-size: 3.5vw;
+            margin-left: 4rem;
+            margin-top: 1rem;
+          }
+
+          .name {
+            font-size: 9.7vw;
+            margin-bottom: 1rem;
+            margin-left: 3rem;
+            width: 80%;
+          }
+
+          time {
+            font-size: 5vw;
+            margin-left: 3rem;
+            margin-top: unset;
+          }
+
+
+        }
+
+        //Birth and death information
+        .timeline {
+
+          padding-top: 6vw;
+          padding-bottom: 8vw;
+
+          margin-top: -7rem;
+          margin-left: 0;
+          width: 100%;
+
+          background-color: #fff;
+
+          ul {
+            margin-top: 4rem;
+
+            li {
+              margin-left: 4rem;
+              padding-right: 4rem;
+              border-left: 1px solid #000;
+              padding-bottom: 4rem;
+
+              &:before {
+                width: 20px;
+                height: 20px;
+                margin-left: -2rem;
+                box-shadow: 0 0 0 10px rgb(255, 255, 255);
+
+              }
+
+              span {
+                font-size: 3.1vw;
+                line-height: 4vw;
+                margin-top: -1.0rem;
+                margin-bottom: 1.5rem;
+                margin-left: 2rem;
+              }
+
+            }
+          }
+
+          .a-Btn {
+            //margin: 1rem 3rem;
+            margin-top: 4rem;
+            margin-right: 3rem;
+            margin-bottom: 5rem;
+            margin-left: 3rem;
+
+          }
+        }
+      }
+    }
+  }
+
+
+  //Section with notes about the person from the family and photographs
+  .personal-note-section {
+
+    .personal-note-bar {
+
+      flex-direction: column;
+      align-items: center;
+      margin-left: 3.8rem;
+      margin-right: 3.8rem;
+      padding-top: 0;
+      padding-bottom: 10rem;
+
+      width: unset;
+      min-width: unset;
+
+      > div, div:nth-child(2) {
+        width: 100%;
+        display: grid;
+        justify-items: end;
+      }
+
+      //Notes
+      .family-note {
+        width: unset;
+        padding-top: 12.5rem;
+        padding-bottom: 3rem;
+        max-width: unset;
+
+        //Notes title
+        .note-title {
+          font-size: 6.5vw;
+          line-height: 9vw;
+          width: 100%;
+        }
+
+        //Notes text
+        .note-text {
+          margin-top: 4rem;
+          width: 100%;
+          font-size: 2rem;
+          line-height: 3.4rem;
+          letter-spacing: -0.25px;
+        }
+
+      }
+
+      //Pictures
+      .pictures {
+        width: 100%;
+        position: unset;
+        display: unset;
+        right: unset;
+
+        .pictures-content {
+
+          margin-bottom: -52rem;
+
+          width: 100%;
+          right: unset;
+          position: unset;
+          max-width: unset;
+
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-auto-rows: 25% 20% 25%;
+          grid-gap: 0.55rem;
+          justify-items: end;
+
+          .picture:nth-child(1){
+            max-height: unset;
+            order: 1;
+            grid-column: span 3;
+            grid-row: 1;
+            width: 100%;
+            height: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+          .picture:nth-child(2){
+            max-height: unset;
+            order: 3;
+            grid-column: span 2;
+            grid-row: 2;
+            width: 100%;
+            height: 100%;
+          }
+          .picture:nth-child(3){
+            max-height: unset;
+            order: 2;
+            grid-column: 1;
+            grid-row: 2;
+            width: 100%;
+            height: 100%;
+          }
+          .picture:nth-child(4){
+            max-height: unset;
+            order: 4;
+            grid-column: span 3;
+            grid-row: 3;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+
+          //margin-right: 0;
+          //margin-left: 0;
+          //
+          //
+          //div:nth-child(1) {
+          //  margin-bottom: 1.5rem;
+          //  margin-top: 0.5rem;
+          //
+          //  img:nth-child(1) {
+          //    display: none;
+          //  }
+          //
+          //  img:nth-child(2) {
+          //    display: block;
+          //  }
+          //}
+          //
+          //
+          //div:nth-child(2) {
+          //  margin-bottom: 1.5rem;
+          //  flex-direction: row-reverse;
+          //
+          //  img {
+          //    width: 49%;
+          //  }
+          //
+          //  img:nth-child(2) {
+          //    display: none;
+          //  }
+          //
+          //  img:nth-child(3) {
+          //    margin-right: 0.3vw;
+          //  }
+          //}
+          //
+          //div:nth-child(3) {
+          //  margin-top: 0.3vw;
+          //  display: block;
+          //
+          //  img {
+          //  }
+          //}
+        }
+      }
+    }
+  }
+
+  //Flowers section
+  .flowers-section {
+
+    .flowers-bar {
+      flex-direction: column;
+      align-items: center;
+      margin-left: 3rem;
+      margin-right: 3rem;
+
+      width: unset;
+      min-width: unset;
+
+      > div {
+        width: unset;
+      }
+
+      .flowers-note {
+        //width: 74%;
+        width: unset;
+        margin-bottom: 10vw;
+        margin-right: 0;
+
+        //Logo
+        a{
+          text-decoration: none;
+          color: #000000;
+
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          column-gap: 3rem;
+
+          margin-bottom: 3rem;
+
+          img{
+            width: 5rem;
+          }
+
+          span{
+            font-weight: 600;
+            font-size: 4rem;
+            line-height: 3.5rem;
+            letter-spacing: -0.75px;
+          }
+        }
+
+        //Logo and title
+        .flowers-title {
+          font-size: 7vw;
+          line-height: 9vw;
+          align-items: center;
+
+          img {
+            width: 10%;
+          }
+
+          span {
+            margin-left: 3rem;
+            letter-spacing: -2px;
+          }
+
+        }
+
+        //Description
+        .flowers-text {
+          font-size: 2.35rem;
+          line-height: 3.5rem;
+          letter-spacing: -0.75px;
+        }
+
+      }
+
+      //List of products
+      .flowers-list {
+        width: 100%;
+        margin-left: unset;
+        margin-bottom: 9vw;
+
+        .flowers-card {
+
+          > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2.5rem;
+            padding-bottom: 3.5rem;
+
+            .a-Btn {
+              width: 100%;
+            }
+          }
+
+          .flower-line {
+
+            .flower-image {
+              width: 10rem;
+            }
+
+            .flower-name-date {
+              margin-left: 3rem;
+              width: 55%;
+
+              .flower-nameText {
+                font-size: 2rem;
+                line-height: 3rem;
+                letter-spacing: 0;
+              }
+
+              .flower-date {
+                font-size: 2rem;
+                line-height: 3rem;
+                letter-spacing: -1px;
+              }
+            }
+
+            .flower-type {
+              width: 9vw;
+            }
+
+            .flower-price {
+              margin-left: 1rem;
+              margin-right: 0.6rem;
+              font-size: 2rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  //About app section
+  .download-app-section {
+    max-height: 150rem;
+
+    .background{
+      position: relative;
+      overflow: hidden;
+      .background-img{
+        content: url(../img/downloadapp_back_l.jpg);
+        position: absolute;
+        top: -35rem;
+        height: 125%;
+      }
+    }
+
+    .download-app-bar {
+      width: unset;
+      margin-left: 3.5rem;
+      margin-right: 3.5rem;
+
+      //Empty div
+      div:nth-child(1) {
+        width: 0;
+        display: none;
+      }
+
+      .download-app-info {
+        width: unset;
+        margin-top: 28vw;
+        margin-bottom: 100vw;
+        margin-left: 0;
+
+        //Title
+        .download-app-info-title {
+          font-size: 12vw;
+          line-height: 20vw;
+          letter-spacing: -7px;
+
+        }
+
+        //Description
+        .download-app-info-text {
+          font-size: 2rem;
+          line-height: 3.5rem;
+
+        }
+
+        //Apps stores buttons
+        .download-app-info-buttons {
+          flex-direction: column;
+          align-items: center;
+          margin-top: 2.5rem;
+
+          a {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 4vw;
+            height: 11vw;
+
+            padding-right: 0;
+            padding-left: 0;
+
+            img {
+              width: 35%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  //Footer
+  footer {
+
+    .footer-bar {
+      flex-direction: row;
+      justify-content: center;
+      width: unset;
+
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      max-width: unset;
+
+      a{
+        width: 30%;
+        img{
+          width: 100%;
+        }
+      }
+
+      div:nth-child(2) {
+        display: none;
+      }
+    }
+  }
+}

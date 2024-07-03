@@ -1,0 +1,844 @@
+@color_dark: #251605;
+//@color_accent: #b3767d;
+@color_accent: #b4767d;
+
+
+:root {
+  font-family: Inter, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  letter-spacing: -0.3px;
+
+  font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+//Black back button
+.a-Btn {
+  display: block;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 6px;
+  color: #FFFFFF;
+  background: @color_dark;
+  font-weight: 500;
+  font-size: 1rem;
+
+  text-align: center;
+  text-decoration: none;
+  transition: all .5s ease !important;
+}
+
+.a-Btn:hover {
+  background: @color_accent !important;
+}
+
+
+//No back button
+.a-link {
+  text-decoration: none;
+  color: @color_dark;
+
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 2rem;
+  transition: all .5s ease;
+}
+
+.a-link:hover {
+  color: @color_accent;
+}
+
+//Background of button "Download app"
+.download-btn {
+  display: flex;
+  width: 13vw;
+  flex-direction: column;
+}
+
+//Background of button "Download app" (in footer)
+.download-white-btn {
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+}
+
+
+//Website logo
+.logo {
+  position: relative;
+  width: 50%;
+  display: flex;
+
+  img:nth-child(1) {
+    position: absolute;
+    left: 0;
+  }
+
+  img:nth-child(2) {
+    position: absolute;
+    left: 71px;
+    top: 20px;
+  }
+}
+
+.container {
+  max-width: 1117px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.background {
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+  position: relative;
+
+  .background-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+}
+
+.section-container {
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+  padding: 0 25px;
+  //display: flex;
+  //align-items: center;
+  //justify-content: center;
+  ////top: 0;
+  ////left: 0;
+  //width: 100%;
+  //height: 100%;
+}
+
+
+//Header
+header {
+  position: sticky;
+  z-index: 2;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: -6rem;
+    margin-top: 1.5rem;
+
+    img {
+      height: 58px;
+    }
+
+  }
+
+  //Navigation
+  nav {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+
+    //Header menu
+    .header-menu {
+
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: 1rem;
+
+      .a-Btn {
+        width: 39%;
+      }
+
+    }
+  }
+}
+
+ul, li {
+  list-style: none;
+  padding: 0;
+}
+
+//Information about person section
+.person-card-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  position: relative;
+  z-index: 1;
+
+  .background {
+    background-color: #f0efef;
+  }
+
+  //Person card
+  .person-card {
+    margin-top: 10rem;
+    margin-bottom: -2rem;
+
+    width: 100%;
+
+    position: relative;
+    min-width: 950px;
+
+    display: flex;
+
+    box-shadow: 0 4px 60px 0 #0000001A;
+    height: 603px;
+
+    background-color: #FFFFFF;
+
+    overflow: hidden;
+
+    //Person pictures
+    .person-image {
+      width: 50%;
+
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+    }
+
+    //Person information
+    .person-data {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      padding-top: 5.5rem;
+      padding-right: 0;
+      padding-bottom: 4.5rem;
+      padding-left: 5rem;
+
+      //Name / birth and death dates
+      .in-memory {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        color: @color_dark;
+
+        .title {
+          font-weight: 400;
+          font-size: 1.2rem;
+          padding: 0;
+          text-transform: uppercase;
+          margin-left: 0.3rem;
+        }
+
+        .name {
+          font-weight: 600;
+          font-size: 3rem;
+          padding: 0;
+          margin: 0;
+        }
+
+        time {
+          font-weight: 600;
+          font-size: 1.5rem;
+          padding: 0;
+          margin-left: 0.4rem;
+          margin-top: 0.5rem;
+        }
+      }
+
+      //Birth and death information
+      .timeline {
+        width: 20rem;
+
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 3.8rem;
+        margin-left: 0.5rem;
+
+        li {
+          display: grid;
+
+          border-left: 1px dotted #000;
+          padding-bottom: 1.5rem;
+          padding-left: 1.25rem;
+          margin-left: 1rem;
+
+          &:last-child {
+            border: 0;
+            padding-bottom: 0;
+          }
+
+          &:before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border: 1px solid #000;
+            border-radius: 50%;
+            left: -4px;
+            display: block;
+            margin-left: -1.5rem;
+            margin-bottom: -1rem;
+          }
+        }
+
+        span {
+            font-size: .8rem;
+            line-height: 1.8rem;
+            margin-top: -0.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .a-Btn {
+          margin-top: -0.3rem;
+          margin-left: 0.5rem;
+        }
+
+      }
+    }
+  }
+}
+
+.personal-note-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  color: #FFFFFF;
+  position: relative;
+  .background-img {
+    background-color: @color_dark;
+
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
+
+  .personal-note-bar {
+    margin: 0 auto;
+    min-width: 950px;
+    max-width: 1117px;
+    display: flex;
+    padding-top: 10rem;
+    padding-bottom: 5rem;
+    align-items: center;
+
+  }
+
+  //Notes
+  .family-note {
+    display: flex;
+    flex-direction: column;
+
+    //min-width: 558px;
+    //max-width: 558px;
+    width: 558px;
+
+    //Note title
+    .note-title {
+      font-weight: 600;
+      font-size: 2.9rem;
+      line-height: 3rem;
+      margin-top: 0;
+      margin-bottom: 0;
+      letter-spacing: -0.3px;
+    }
+
+    //Note text
+    .note-text {
+      width: 88%;
+      margin-top: 2.8rem;
+      font-weight: 400;
+      font-size: 0.8rem;
+      line-height: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  //Pictures
+
+  .pictures{
+    width: 50%;
+  }
+
+  .pictures-content {
+    position: relative;
+    max-width: 56.5rem;
+    width: 47vw;
+    right: -1rem;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 0.55rem;
+
+    .picture:nth-child(1) {
+      grid-area: 1 / 1 / 2 / 4;
+      height: 22vw;
+      max-height: 26rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .picture:nth-child(2) {
+      grid-area: 2 / 1 / 3 / 2;
+      //height: 20rem;
+      height: 16vw;
+      max-height: 19rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .picture:nth-child(3) {
+      grid-area: 2 / 2 / 3 / 3;
+      //height: 20rem;
+      height: 16vw;
+      max-height: 19rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .picture:nth-child(4) {
+      grid-area: 2 / 3 / 3 / 4;
+      //height: 20rem;
+      height: 16vw;
+      max-height: 19rem;
+      width: 100%;
+      object-fit: cover;
+    }
+
+  }
+}
+
+//Section with notes about the person from the family and photographs
+//.personal-note-section {
+//  display: grid;
+//  grid-template-columns: 1fr;
+//  grid-template-rows: 1fr;
+//  color: #FFFFFF;
+//
+//  .background {
+//    //background-color: @color_dark;
+//    background-color: #FFFFFF;
+//  }
+//
+//
+//  .personal-note-bar {
+//    margin: auto;
+//    min-width: 950px;
+//    max-width: 1900px;
+//    display: flex;
+//    padding-top: 10rem;
+//    padding-bottom: 5rem;
+//    align-items: center;
+//
+//    > div {
+//      display: grid;
+//      width: 50%;
+//      justify-items: end;
+//    }
+//
+//    > div:nth-child(2) {
+//      display: grid;
+//      width: 50%;
+//      justify-items: start;
+//    }
+//
+//    //Notes
+//    .family-note {
+//      display: flex;
+//      flex-direction: column;
+//
+//      max-width: 558px;
+//
+//      //Note title
+//      .note-title {
+//        font-weight: 600;
+//        font-size: 2.9rem;
+//        line-height: 3rem;
+//        margin-top: 0;
+//        margin-bottom: 0;
+//        letter-spacing: -0.3px;
+//      }
+//
+//      //Note text
+//      .note-text {
+//        width: 88%;
+//        margin-top: 2.8rem;
+//        font-weight: 400;
+//        font-size: 0.8rem;
+//        line-height: 1.5rem;
+//        letter-spacing: 0.5px;
+//      }
+//    }
+//
+//    //Pictures
+//    .pictures {
+//      display: flex;
+//      flex-direction: column;
+//      width: 136%;
+//      //margin-top: -9rem;
+//      .pictures-content {
+//
+//        display: grid;
+//        grid-template-columns: 1fr 1fr 1fr;
+//        grid-auto-rows: auto;
+//        grid-gap: 0.55rem;
+//        justify-items: end;
+//
+//        .picture:nth-child(1) {
+//          order: 1;
+//          grid-column: span 3;
+//          grid-row: 1;
+//          width: 100%;
+//          object-fit: cover;
+//          //margin-top: 9rem;
+//          //margin-bottom: -9rem;
+//          height: 23rem;
+//          //height: 16rem;
+//        }
+//
+//        .picture:nth-child(2) {
+//          order: 2;
+//          grid-column: 1;
+//          grid-row: 2;
+//          width: 100%;
+//          height: 13rem;
+//          object-fit: cover;
+//          object-position: center;
+//        }
+//
+//        .picture:nth-child(3) {
+//          order: 3;
+//          grid-column: 2;
+//          grid-row: 2;
+//          width: 100%;
+//          height: 13rem;
+//          object-fit: cover;
+//          object-position: center;
+//        }
+//
+//        .picture:nth-child(4) {
+//          order: 4;
+//          grid-column: 3;
+//          grid-row: 2;
+//          width: 100%;
+//          height: 13rem;
+//          object-fit: cover;
+//          object-position: center;
+//        }
+//      }
+//    }
+//  }
+//
+//}
+
+//Flowers section
+.flowers-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  background-color: @color_accent;
+
+  margin-bottom: -0.1rem;
+
+  .flowers-bar {
+    display: flex;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    align-items: center;
+    min-width: 950px;
+
+    > div {
+      width: 50%;
+    }
+
+
+    .flowers-note {
+      width: 74%;
+      margin-right: 6rem;
+      margin-left: 0.6rem;
+      margin-top: -0.5rem;
+
+      //Logo
+      a {
+        text-decoration: none;
+        color: @color_dark;
+
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        column-gap: 1.5rem;
+
+        margin-bottom: 1.5rem;
+
+        //img{
+        svg {
+          width: 3rem;
+        }
+
+        svg path {
+          fill: @color_dark;
+        }
+
+        span {
+          font-weight: 600;
+          font-size: 3rem;
+          line-height: 3.5rem;
+          letter-spacing: -0.75px;
+        }
+      }
+
+      //Description
+      .flowers-text {
+
+        color: @color_dark;
+
+        margin: 0;
+
+        font-weight: 300;
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+    }
+
+    //List of products
+    .flowers-list {
+      width: 44%;
+      margin-left: 7vw;
+
+      .flowers-card {
+        display: flex;
+        flex-direction: column;
+
+        background-color: #fff;
+        box-shadow: 0 4px 60px 0 #0000001A;
+
+        padding-top: 1.5rem;
+        padding-right: 3rem;
+        padding-bottom: 2rem;
+        padding-left: 3.5rem;
+
+        > div {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 0.7rem;
+
+          .a-Btn {
+            width: 108%;
+          }
+        }
+
+
+        .flowers-ul {
+          padding: 0;
+        }
+
+        .flower-li {
+          list-style: none;
+          margin-top: 0.5rem;
+        }
+
+        .flower-line {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .flower-image {
+            //width: 20%;
+          }
+
+
+          .flower-name-date {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 0.95rem;
+            width: 60%;
+
+            .flower-nameText {
+              font-weight: 600;
+              font-size: 1rem;
+              line-height: 1.5rem;
+            }
+
+            .flower-date {
+              font-weight: 300;
+              font-size: 0.8rem;
+              line-height: 1.3rem;
+            }
+
+          }
+
+          .flower-type {
+
+          }
+
+          .flower-price {
+            margin-left: 0.6rem;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1.5rem;
+          }
+
+        }
+
+      }
+    }
+  }
+}
+
+//About app section
+.download-app-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  .download-app-bar {
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding-bottom: 15.75rem;
+
+    //Empty div
+    div:nth-child(1) {
+      width: 50%;
+    }
+
+    .download-app-info {
+      width: 41%;
+      margin-top: 12.5rem;
+      display: flex;
+      flex-direction: column;
+      margin-left: 2rem;
+
+      //Title
+      .download-app-info-title {
+        color: #fff;
+        font-weight: 600;
+        font-size: 3rem;
+        line-height: 4rem;
+        margin: 0;
+      }
+
+      //Description
+      .download-app-info-text {
+        color: #fff;
+        font-weight: 300;
+        font-size: 0.9rem;
+        line-height: 1.5rem;
+        margin: 0;
+      }
+
+      //Apps stores buttons
+      .download-app-info-buttons {
+        display: flex;
+        margin-top: 1.1rem;
+        justify-content: space-around;
+
+        a {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 2.5rem;
+          padding: 0.6rem 2rem;
+          width: 33%;
+
+          background: black;
+
+          img {
+
+          }
+        }
+      }
+    }
+  }
+}
+
+//Footer
+footer {
+  background-color: #fff;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+
+  .footer-bar {
+
+    display: flex;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    justify-content: space-between;
+
+    //Footer nav
+    a {
+      //width: 16%;
+      img:nth-child(1) {
+
+      }
+    }
+
+    .footer-links {
+
+      width: 43%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+
+    }
+
+  }
+}
+
+#main {
+  [hidden] {
+    display: none;
+  }
+}
+
+#mask {
+  width: 100%;
+  height: 100%;
+  background: @color_accent;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  transition: 0.6s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  video {
+    opacity: 0;
+  }
+
+  canvas {
+    margin-left: -250px;
+  }
+
+}

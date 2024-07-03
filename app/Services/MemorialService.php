@@ -2,31 +2,29 @@
 
 namespace App\Services;
 
+use App\Helpers\Statuses;
+use App\Http\Requests\Memorials\{CreateRequest, UpdateRequest,};
 use App\Models\Memorial;
-use App\Traits\MediaServiceTrait;
-use App\Http\Requests\Memorials\{
-    CreateRequest,
-    UpdateRequest,
-};
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MemorialService
 {
-    use MediaServiceTrait;
-
     public function getList(int $userId, int $authId): Collection
     {
         $q = Memorial::where('user_id', $userId);
 
         if ($userId === $authId) {
             return $q
-                ->where('status', '<>', Memorial::STATUS_DELETED)
+                ->where('status', '<>', Statuses::STATUS_DELETED)
                 ->get();
         }
 
         return $q
-            ->where('status', Memorial::STATUS_PUBLISHED)
+            ->where('status', Statuses::STATUS_PAID)
             ->get();
     }
 
@@ -59,5 +57,23 @@ class MemorialService
         $memorial->update(compact('status'));
 
         return $memorial;
+    }
+
+    public function bindViewer($memorial): array
+    {
+        $viewer = User::find(Auth::id());
+        try {
+            $memorial->viewers()->save($viewer);
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 7) {
+                return [
+                    'result' => 'error',
+                    'message' => 'This user already bound to this memorial.',
+                ];
+            }
+        }
+        return [
+            'result' => 'success',
+        ];
     }
 }

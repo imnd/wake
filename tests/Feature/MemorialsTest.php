@@ -1,7 +1,7 @@
 <?php
 
+use App\Helpers\Statuses;
 use App\Models\Memorial;
-use App\Traits\MediaServiceTrait;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -10,9 +10,8 @@ use Tests\TestCase;
  */
 class MemorialsTest extends TestCase
 {
-    use MediaServiceTrait;
-
     protected string $prefix = 'memorials';
+
     private Memorial $memorial;
 
     /**
@@ -23,20 +22,6 @@ class MemorialsTest extends TestCase
         parent::setUp();
 
         $this->memorial = Memorial::factory()->create($this->getMemorialData());
-
-        $this->addMedia('image');
-        $this->addMedia('video');
-    }
-
-    private function addMedia($type)
-    {
-        $method = 'get' . ucfirst($type);
-        for ($i = 0; $i < $this->faker->numberBetween(2, 5); $i++) {
-            $uploadPath = $this->putToStorage('memorial', $this->$method());
-            $this->memorial
-                ->addMedia($this->getStoragePath($uploadPath))
-                ->toMediaCollection();
-        }
     }
 
     /**
@@ -66,6 +51,21 @@ class MemorialsTest extends TestCase
     /**
      * @test
      */
+    public function can_not_create_memorial_with_wrong_dates()
+    {
+        $dayOfBirth = $this->faker->date;
+        $date = (new DateTime($dayOfBirth))->add(DateInterval::createFromDateString('-3 days'));
+        $dayOfDeath = $date->format('Y-m-d');
+
+        $this->postRequest(['create'], array_merge($this->getMemorialData(), [
+            'day_of_birth' => $dayOfBirth,
+            'day_of_death' => $dayOfDeath,
+        ]), Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     */
     public function can_update_memorial()
     {
         $this->putRequest(['update', $this->memorial->id], $this->getMemorialData(), Response::HTTP_OK);
@@ -74,59 +74,29 @@ class MemorialsTest extends TestCase
     /**
      * @test
      */
-    public function can_upload_media()
+    public function can_change_memorial_status()
     {
-        $this->postRequest(
-            ['upload-media', $this->memorial->id],
-            [
-                'files' => [
-                    $this->getImage(),
-                    $this->getImage(),
-                    $this->getImage(),
-                ],
-            ],
-            Response::HTTP_OK
+        $this->patchRequest(
+            ['change-status', $this->memorial->id],
+            ['status' => Statuses::STATUS_PAID],
+            Response::HTTP_NO_CONTENT
+        );
+        $this->patchRequest(
+            ['change-status', $this->memorial->id],
+            ['status' => Statuses::STATUS_ARCHIVED],
+            Response::HTTP_NO_CONTENT
         );
     }
 
     /**
      * @test
      */
-    public function can_get_media()
+    public function can_delete_memorial()
     {
-        $this->getRequest(['get-media', $this->memorial->id]);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_videos()
-    {
-        $this->getRequest(['get-videos', $this->memorial->id]);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_images()
-    {
-        $this->getRequest(['get-images', $this->memorial->id]);
-    }
-
-    /**
-     * @test
-     */
-    public function can_delete_medium()
-    {
-        $this->deleteRequest(['delete-medium', $this->memorial->media()->first()->id]);
-    }
-
-    /**
-     * @test
-     */
-    public function can_delete_media()
-    {
-        $this->deleteRequest(['delete-media', $this->memorial->id]);
+        $this->deleteRequest(
+            ['delete', $this->memorial->id],
+            Response::HTTP_NO_CONTENT
+        );
     }
 
     /**
@@ -139,5 +109,14 @@ class MemorialsTest extends TestCase
             $this->getImageUploadParams(),
             Response::HTTP_NO_CONTENT
         );
+    }
+
+    /**
+     * @test
+     */
+    public function can_show_memorial()
+    {
+        $this->prefix = '';
+        $this->getRequestResponse(self::METHOD_GET, ['memorial', $this->memorial->uuid, '']);
     }
 }

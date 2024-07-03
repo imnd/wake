@@ -27,19 +27,9 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function can_get_user_details()
+    public function can_get_short_user_details()
     {
         $result = $this->getRequest(['short-details', $this->user->id]);
-        $this->assertArrayHasKey('name', $result);
-        $this->assertArrayNotHasKey('error', $result);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_full_user_details()
-    {
-        $result = $this->getRequest(['full-details', $this->user->id]);
         $this->assertArrayHasKey('name', $result);
         $this->assertArrayNotHasKey('error', $result);
     }
@@ -72,6 +62,14 @@ class UserTest extends TestCase
     public function admin_can_disable_user()
     {
         $this->patchRequest(['destroy', $this->foreignUser->id], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_disable_himself()
+    {
+        $this->patchRequest(['destroy', $this->user->id], Response::HTTP_NO_CONTENT);
     }
 
     /**

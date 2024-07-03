@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadAvatarRequest;
-use App\Http\Requests\Users\{
-    UpdateRequest,};
+use App\Http\Requests\Media\UploadAvatarRequest;
+use App\Http\Requests\Users\UpdateRequest;
 use App\Http\Resources\User\FullUserResource;
-use App\Http\Resources\User\ShortUserResource;
 use App\Models\User;
-use App\Services\UserService;
+use App\Services\MediaService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +51,7 @@ class UsersController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="OK",
-     *         ref="#/components/schemas/ShortUserResource"),
+     *         ref="#/components/schemas/FullUserResource"),
      *     ),
      *     @OA\Response(
      *         response=401,
@@ -66,76 +64,6 @@ class UsersController extends Controller
      * )
      */
     public function shortDetails(?User $user = null): JsonResponse
-    {
-        $user = $user ?? Auth::user();
-
-        return $this->responseOk(new ShortUserResource($user));
-    }
-
-    /**
-     * Get full user details
-     *
-     * @return JsonResponse
-     * @OA\Get(
-     *     path="/api/v1/users/{ID}",
-     *     summary="Get full user details",
-     *     description="Get full user details",
-     *     operationId="details",
-     *     tags={"Users"},
-     *
-     *     @OA\SecurityScheme(
-     *         securityScheme="Bearer",
-     *         type="apiKey",
-     *         name="Authorization",
-     *         in="header"
-     *     ),
-     *
-     *     @OA\Parameter(
-     *         in="path",
-     *         name="ID",
-     *         required=true,
-     *         @OA\Schema(
-     *           type="integer"
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *         response=200,
-     *         description="OK",
-     *         @OA\JsonContent(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="id",
-     *                  type="integer",
-     *                  example=11,
-     *              ),
-     *              @OA\Property(
-     *                  property="name",
-     *                  type="string",
-     *                  example="Vladimir Putin",
-     *              ),
-     *              @OA\Property(
-     *                  property="avatar",
-     *                  type="string",
-     *                  example="http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg",
-     *              ),
-     *         ),
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized"
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Access Denied"
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Not found"
-     *     ),
-     * )
-     */
-    public function fullDetails(?User $user = null): JsonResponse
     {
         $user = $user ?? Auth::user();
 
@@ -319,7 +247,7 @@ class UsersController extends Controller
     public function uploadAvatar(
         ?User $user,
         UploadAvatarRequest $request,
-        UserService $service,
+        MediaService $service,
     ): JsonResponse {
         $user = $user ?? Auth::user();
 

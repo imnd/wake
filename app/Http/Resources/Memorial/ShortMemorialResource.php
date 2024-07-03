@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @OA\Schema(
  *     @OA\Xml(name="ShortMemorialResource"),
  *     @OA\Property(property="id", type="int8", example="53"),
+ *     @OA\Property(property="uuid", type="uuid", example="f9b33f0e-53d2-4cb8-bb2d-702fd9bb0c68"),
  *     @OA\Property(property="title", type="string", example="Lorem ipsum"),
  *     @OA\Property(property="first_name", type="string", example="John"),
  *     @OA\Property(property="middle_name", type="string", example="Fitzgerald"),
@@ -20,7 +21,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="day_of_death", type="string", example="2012-12-13T00:00:00.000000Z"),
  *     @OA\Property(property="text", type="string", example="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel libero leo."),
  *     @OA\Property(property="default", type="boolean", example="true"),
- *     @OA\Property(property="status", type="string", example="published"),
+ *     @OA\Property(property="status", type="string", example="paid"),
  *     @OA\Property(property="avatar", type="string", example="http://b-ouquet/storage/avatars/FLS4yzPIjW1I1PkC1uymrulxBUcrXyHl7xiDuEpm_avatar.jpg"),
  *     @OA\Property(
  *          property="user",
@@ -35,6 +36,7 @@ class ShortMemorialResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'uuid' => $this->uuid,
             'title' => $this->title,
             'first_name' => $this->first_name,
             'middle_name' => $this->middle_name,

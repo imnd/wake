@@ -2,42 +2,44 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, CanResetPassword
 {
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
+    use Billable;
 
-    /**
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'avatar',
+        'stripe_id',
+        'pm_type',
+        'pm_last_four',
+        'trial_ends_at',
     ];
 
-    /**
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'trial_ends_at' => 'datetime',
     ];
 
     /**
@@ -60,13 +62,20 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    # RELATIONS
+
+    public function viewedMemorials(): BelongsToMany
+    {
+        return $this->belongsToMany(Memorial::class, 'memorial_user')->withTimestamps();
+    }
+
     public function memorials(): HasMany
     {
         return $this->hasMany(Memorial::class, 'user_id');
     }
 
-    public function memorial()
+    public function memorial(): ?Model
     {
-        return $this->memorials()->where('default', true);
+        return $this->memorials()->where('default', true)->first();
     }
 }

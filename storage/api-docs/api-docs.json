@@ -5,7 +5,7 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/": {
+        "/api/v1/users": {
             "post": {
                 "tags": [
                     "Auth"
@@ -172,6 +172,80 @@
                 }
             }
         },
+        "/api/v1/user/forgot-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send forgot password token",
+                "description": "Send forgot password token",
+                "operationId": "forgot-password",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/user/reset-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send forgot password token",
+                "description": "Send forgot password token",
+                "operationId": "reset-password",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/bouquet-types": {
             "get": {
                 "tags": [
@@ -259,11 +333,35 @@
                         }
                     },
                     {
+                        "name": "anonymous",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "name": "from",
                         "in": "query",
                         "required": true,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -298,9 +396,17 @@
                         }
                     },
                     {
-                        "name": "condolences",
+                        "name": "anonymous",
                         "in": "query",
                         "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "condolences",
+                        "in": "query",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -308,17 +414,25 @@
                     {
                         "name": "from",
                         "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "paid",
+                        "name": "type_id",
                         "in": "query",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "boolean"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -341,6 +455,266 @@
                     },
                     "404": {
                         "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/payment-info": {
+            "get": {
+                "tags": [
+                    "Bouquets"
+                ],
+                "summary": "Get bouquet payment info",
+                "description": "Get bouquet payment info",
+                "operationId": "get-bouquet-payment-info",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/medium": {
+            "post": {
+                "tags": [
+                    "Bouquets media"
+                ],
+                "summary": "Upload bouquet media item",
+                "description": "Upload media item to given bouquet",
+                "operationId": "upload-bouquet-media-item",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MediaResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/media": {
+            "get": {
+                "tags": [
+                    "Bouquets media"
+                ],
+                "summary": "Get all bouquet media",
+                "description": "Get all bouquet media",
+                "operationId": "get-bouquet-media",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Bouquets media"
+                ],
+                "summary": "Upload bouquet media",
+                "description": "Upload media to given bouquet",
+                "operationId": "upload-bouquet-media",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "files",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "file"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully uploaded"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/video": {
+            "get": {
+                "tags": [
+                    "Bouquets media"
+                ],
+                "summary": "Get bouquet videos",
+                "description": "Get bouquet videos",
+                "operationId": "get-bouquet-videos",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquets/{BOUQUET_ID}/images": {
+            "get": {
+                "tags": [
+                    "Bouquets media"
+                ],
+                "summary": "Get bouquet images",
+                "description": "Get bouquet images",
+                "operationId": "get-bouquet-images",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
                     }
                 }
             }
@@ -375,6 +749,98 @@
                     },
                     "404": {
                         "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/bouquet/{BOUQUET_ID}/media": {
+            "delete": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Delete bouquet media",
+                "description": "Delete all bouquet media",
+                "operationId": "destroy-bouquet-media",
+                "parameters": [
+                    {
+                        "name": "BOUQUET_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/memorials/{MEMORIAL_ID}/medium": {
+            "post": {
+                "tags": [
+                    "Memorials media"
+                ],
+                "summary": "Upload medium",
+                "description": "Upload medium to given memorial",
+                "operationId": "upload-memorial-medium",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "array[file]"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully uploaded"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
                     }
                 }
             }
@@ -421,7 +887,7 @@
                 ],
                 "summary": "Upload media",
                 "description": "Upload media to given memorial",
-                "operationId": "upload-media",
+                "operationId": "upload-memorial-media",
                 "parameters": [
                     {
                         "name": "MEMORIAL_ID",
@@ -436,7 +902,10 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "array[file]"
+                            "type": "array",
+                            "items": {
+                                "type": "file"
+                            }
                         }
                     }
                 ],
@@ -614,58 +1083,6 @@
                 }
             }
         },
-        "/api/v1/bouquets/{BOUQUET_ID}/media": {
-            "post": {
-                "tags": [
-                    "Bouquets"
-                ],
-                "summary": "Upload medium",
-                "description": "Upload medium to given bouquet",
-                "operationId": "upload-medium",
-                "parameters": [
-                    {
-                        "name": "BOUQUET_ID",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "file",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "file"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/MediaResource"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Access Denied"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    },
-                    "422": {
-                        "description": "Unprocessable entity"
-                    }
-                }
-            }
-        },
         "/api/v1/users/{USER_ID}/memorials": {
             "get": {
                 "tags": [
@@ -731,7 +1148,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ShortMemorialResource"
+                                    "$ref": "#/components/schemas/FullMemorialResource"
                                 }
                             }
                         }
@@ -758,6 +1175,102 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "middle_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "goal_sum",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "place_of_birth",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_of_death",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day_of_birth",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day_of_death",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "default",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -833,6 +1346,86 @@
                 "description": "Create memorial",
                 "operationId": "create-memorial",
                 "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "middle_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_of_birth",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_of_death",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day_of_birth",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day_of_death",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "default",
                         "in": "query",
@@ -928,6 +1521,133 @@
                 }
             }
         },
+        "/api/v1/memorials/bind-viewer": {
+            "post": {
+                "tags": [
+                    "Memorials"
+                ],
+                "summary": "Bind user to memorial",
+                "description": "Bind user to memorial",
+                "operationId": "bind-user-to-memorial",
+                "parameters": [
+                    {
+                        "name": "MEMORIAL_ID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "403": {
+                        "description": "Access Denied"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/payments/bouquet": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "payment for the bouquet",
+                "description": "Payment for the bouquet",
+                "operationId": "bouquet-payment",
+                "parameters": [
+                    {
+                        "name": "amount",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "bouquet_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/payments/memorial": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "payment for the memorial",
+                "description": "Payment for the memorial",
+                "operationId": "memorial-payment",
+                "parameters": [
+                    {
+                        "name": "amount",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "memorial_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/payments/webhook": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "webhook",
+                "description": "webhook",
+                "operationId": "webhook",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
         "/api/v1/users/me": {
             "get": {
                 "tags": [
@@ -948,65 +1668,12 @@
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "#/components/schemas/ShortUserResource"
+                        "$ref": "#/components/schemas/FullUserResource"
                     }
                 }
             }
         },
         "/api/v1/users/{ID}": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Get full user details",
-                "description": "Get full user details",
-                "operationId": "details",
-                "parameters": [
-                    {
-                        "name": "ID",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 11
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Vladimir Putin"
-                                        },
-                                        "avatar": {
-                                            "type": "string",
-                                            "example": "http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Access Denied"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
-            },
             "put": {
                 "tags": [
                     "Users"
@@ -1138,6 +1805,10 @@
                         "type": "int8",
                         "example": "53"
                     },
+                    "anonymous": {
+                        "type": "boolean",
+                        "example": "1"
+                    },
                     "condolences": {
                         "type": "string",
                         "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel libero leo. Fusce vitae laoreet nisi. Cras faucibus ullamcorper sagittis. Donec ac magna a nunc faucibus congue sed non ante."
@@ -1150,11 +1821,22 @@
                         "type": "string",
                         "example": "unpaid"
                     },
+                    "type": {
+                        "$ref": "#/components/schemas/BouquetTypeResource"
+                    },
                     "memorial": {
                         "$ref": "#/components/schemas/ShortMemorialResource"
                     },
-                    "type": {
-                        "$ref": "#/components/schemas/BouquetTypeResource"
+                    "media": {
+                        "$ref": "#/components/schemas/MediaResource"
+                    },
+                    "created": {
+                        "type": "string",
+                        "example": "2024-04-25"
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "example": "cashapp"
                     }
                 },
                 "type": "object",
@@ -1190,8 +1872,38 @@
                     "name": "BouquetTypeResource"
                 }
             },
+            "PaymentResource": {
+                "properties": {
+                    "id": {
+                        "type": "int8",
+                        "example": "53"
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "example": "cashapp"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double",
+                        "example": "150"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "created_at"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "BouquetResource"
+                }
+            },
             "MediaResource": {
                 "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "9"
+                    },
                     "uuid": {
                         "type": "string",
                         "example": "dc9b0882-2f6f-4164-823d-ad2b0b8decb9"
@@ -1199,6 +1911,10 @@
                     "file_name": {
                         "type": "string",
                         "example": "FLS4yzPIjW1I1PkC1uymrulxBUcrXyHl7xiDuEpm.jpg"
+                    },
+                    "collection_name": {
+                        "type": "string",
+                        "example": "video-preview"
                     },
                     "mime_type": {
                         "type": "string",
@@ -1213,7 +1929,7 @@
             "FullMemorialResource": {
                 "type": "object",
                 "xml": {
-                    "name": "ShortMemorialResource"
+                    "name": "FullMemorialResource"
                 },
                 "allOf": [
                     {
@@ -1272,6 +1988,24 @@
                             "user": {
                                 "type": "array",
                                 "items": {
+                                    "$ref": "#/components/schemas/FullUserResource"
+                                }
+                            },
+                            "gender": {
+                                "type": "string",
+                                "example": "male"
+                            },
+                            "goal_sum": {
+                                "type": "number",
+                                "example": "0"
+                            },
+                            "avatar": {
+                                "type": "string",
+                                "example": "http://b-ouquet/storage/avatars/FLS4yzPIjW1I1PkC1uymrulxBUcrXyHl7xiDuEpm_avatar.jpg"
+                            },
+                            "viewers": {
+                                "type": "array",
+                                "items": {
                                     "$ref": "#/components/schemas/ShortUserResource"
                                 }
                             }
@@ -1285,6 +2019,10 @@
                     "id": {
                         "type": "int8",
                         "example": "53"
+                    },
+                    "uuid": {
+                        "type": "uuid",
+                        "example": "f9b33f0e-53d2-4cb8-bb2d-702fd9bb0c68"
                     },
                     "title": {
                         "type": "string",
@@ -1330,6 +2068,10 @@
                         "type": "string",
                         "example": "published"
                     },
+                    "avatar": {
+                        "type": "string",
+                        "example": "http://b-ouquet/storage/avatars/FLS4yzPIjW1I1PkC1uymrulxBUcrXyHl7xiDuEpm_avatar.jpg"
+                    },
                     "user": {
                         "type": "array",
                         "items": {
@@ -1368,6 +2110,12 @@
                             "memorial": {
                                 "type": "int8",
                                 "example": "35"
+                            },
+                            "memorials": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/ShortMemorialResource"
+                                }
                             }
                         },
                         "type": "object"
@@ -1387,10 +2135,6 @@
                     "avatar": {
                         "type": "string",
                         "example": "http://b-ouquet.com/storage/avatars/3gpbiSkdpCbyIADiyb0wuopeSVnbT0gBCJfZi0GL_avatar.jpg"
-                    },
-                    "memorial": {
-                        "type": "int8",
-                        "example": "35"
                     }
                 },
                 "type": "object",

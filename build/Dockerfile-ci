@@ -5,7 +5,7 @@ RUN \
     apt update && apt install -y zip libgd-dev && \
     pecl install pcov && docker-php-ext-enable pcov && \
     docker-php-ext-configure gd --with-external-gd && \
-    docker-php-ext-install -j 2 exif gd
+    docker-php-ext-install -j 2 exif gd bcmath
 
 WORKDIR /application
 

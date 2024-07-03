@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Services\PaymentService;
 use App\Http\Requests\Auth\{
     LoginRequest,
-    RegisterRequest,};
-use App\Http\Resources\User\ShortUserResource;
+    PasswordForgotRequest,
+    PasswordRecoveryRequest,
+    RegisterRequest
+};
 use App\Services\UserService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{
+    Auth,
+    Password
+};
 
 class AuthController extends Controller
 {
@@ -22,7 +27,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      * @OA\Post(
-     *     path="/",
+     *     path="/api/v1/users",
      *     summary="Register user",
      *     description="Register new user",
      *     operationId="register",
@@ -63,12 +68,17 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(RegisterRequest $request, UserService $service): JsonResponse
-    {
-        $user = $service->create($request);
-        $token = $this->attempt($request);
+    public function register(
+        RegisterRequest $request,
+        UserService $userService,
+        PaymentService $paymentService,
+    ): JsonResponse {
+        $user = $userService->create($request->validated());
+        $paymentService->createCustomer($request->only(['name', 'email']));
 
-        return $this->responseCreated($this->getUserData($request, $user, $token));
+        return $this->responseCreated(
+            $userService->getUserData($request, $user, $userService->attempt($request))
+        );
     }
 
     /**
@@ -129,13 +139,15 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function login(LoginRequest $request): JsonResponse
-    {
-        if (!$token = $this->attempt($request)) {
-            return $this->responseUnauthorized();
+    public function login(
+        LoginRequest $request,
+        UserService $userService,
+    ): JsonResponse {
+        if (!$token = $userService->attempt($request)) {
+            return $this->responseUnauthorized('Invalid Email/Password');
         }
 
-        return $this->responseOk($this->getUserData($request, Auth::user(), $token));
+        return $this->responseOk($userService->getUserData($request, Auth::user(), $token));
     }
 
     /**
@@ -225,19 +237,101 @@ class AuthController extends Controller
         ]);
     }
 
-    private function getUserData($request, $user, $token): array
-    {
-        return array_merge(
-            (new ShortUserResource($user))->toArray($request),
-            compact('token')
-        );
+    /**
+     * Forgot password
+     *
+     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/v1/user/forgot-password",
+     *     summary="Send forgot password token",
+     *     description="Send forgot password token",
+     *     operationId="forgot-password",
+     *     tags={"Auth"},
+     *
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="email",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     )
+     * )
+     */
+    public function forgotPassword(
+        PasswordForgotRequest $request,
+        UserService $userService,
+    ): JsonResponse {
+        $userService->sendRecoveryToken($request);
+
+        return $this->responseOk();
     }
 
-    private function attempt(Request $request): string
-    {
-        return Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
+    /**
+     * Reset password
+     *
+     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/v1/user/reset-password",
+     *     summary="Send forgot password token",
+     *     description="Send forgot password token",
+     *     operationId="reset-password",
+     *     tags={"Auth"},
+     *
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="email",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="password",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="password_confirmation",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="token",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *     )
+     * )
+     */
+    public function resetPassword(
+        PasswordRecoveryRequest $request,
+        UserService $userService,
+    ): JsonResponse {
+        $status = $userService->resetPassword($request);
+
+        return $this->responseOk(
+            $status === Password::PASSWORD_RESET
+                ? 'The password reset successfully!'
+                : __($status)
+        );
     }
 }

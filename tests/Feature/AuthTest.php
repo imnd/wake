@@ -31,8 +31,38 @@ class AuthTest extends TestCase
     /**
      * @test
      */
-    public function user_can_login()
+    public function user_can_register()
     {
-        $this->postRequest(['login'], $this->userData, Response::HTTP_OK);
+        $result = $this->postRequest('register', [
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'password' => $this->faker->password,
+        ], Response::HTTP_CREATED);
+        $this->assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('avatar', $result);
+        $this->assertArrayHasKey('token', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_login_and_logout()
+    {
+        $this->postRequest('login', $this->userData, Response::HTTP_OK);
+        $result = $this->postRequest('logout', Response::HTTP_OK);
+        $this->assertArrayHasKey('message', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_forgot_password()
+    {
+        $this
+            ->asGuest()
+            ->postRequest('password.email', [
+                'email' => $this->user->email,
+            ], Response::HTTP_OK)
+        ;
     }
 }

@@ -17,10 +17,6 @@ return new class extends Migration
             $table->softDeletes();
         });
         Schema::table('bouquets', function (Blueprint $table) {
-            $table->unsignedSmallInteger('type_id')
-                ->nullable()
-                ->default(null)
-                ->after('id');
             $table
                 ->foreign('type_id')
                 ->references('id')
@@ -33,9 +29,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('bouquets', function (Blueprint $table) {
-            $table->dropColumn('bouquet_type');
-        });
         Schema::dropIfExists('bouquet_types');
     }
 };

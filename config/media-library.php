@@ -265,12 +265,11 @@ return [
         'video_screenshot_position' => 3,
         'user' => [
             'avatar' => [
-                'width' => 50,
-                'height' => 50,
+                'width' => 100,
+                'height' => 100,
             ],
         ],
         'memorial' => [
-            'max_size' => 500000000,
             'image' => [
                 'preview' => [
                     'width' => 1000,
@@ -292,12 +291,11 @@ return [
                 ],
             ],
             'avatar' => [
-                'width' => 50,
-                'height' => 50,
+                'width' => 400,
+                'height' => 400,
             ],
         ],
         'bouquet' => [
-            'max_size' => 5000000,
             'image' => [
                 'preview' => [
                     'width' => 1000,
@@ -319,8 +317,7 @@ return [
                 ],
             ],
         ],
-        'avatar' => [
-            'max_size' => 100000000,
-        ],
+        'image_max_size' => 10000000,
+        'video_max_size' => 500000000,
     ],
 ];

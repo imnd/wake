@@ -20,7 +20,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|min:3|max:255',
-            'email' => 'sometimes|string|email|max:255',
+            'email' => 'sometimes|email|max:255',
             'password' => 'sometimes|string|min:6',
         ];
     }

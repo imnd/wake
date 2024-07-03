@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Helpers\Statuses;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Memorials\{
-    ChangeStatusRequest,
-    CreateRequest,
-    UpdateRequest,};
-use App\Http\Requests\UploadAvatarRequest;
-use App\Http\Resources\Memorial\FullMemorialResource;
-use App\Http\Resources\Memorial\ShortMemorialResource;
+use App\Http\Requests\Media\UploadAvatarRequest;
+use App\Http\Requests\Memorials\{ChangeStatusRequest, CreateRequest, UpdateRequest,};
+use App\Http\Resources\Memorial\{FullMemorialResource, ShortMemorialResource};
 use App\Models\Memorial;
 use App\Models\User;
+use App\Services\MediaService;
 use App\Services\MemorialService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +20,6 @@ class MemorialsController extends Controller
     use ResponseTrait;
 
     /**
-     * Memorials
      * Returns memorials related to user
      *
      * @return JsonResponse
@@ -97,7 +94,7 @@ class MemorialsController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="OK",
-     *         @OA\JsonContent(ref="#/components/schemas/ShortMemorialResource"),
+     *         @OA\JsonContent(ref="#/components/schemas/FullMemorialResource"),
      *     ),
      *     @OA\Response(
      *         response=401,
@@ -111,7 +108,7 @@ class MemorialsController extends Controller
      */
     public function show(Memorial $memorial): ?JsonResponse
     {
-        if ($memorial->user_id !== Auth::id() && !$memorial->isPublished()) {
+        if ($memorial->user_id !== Auth::id() && !$memorial->isPaid()) {
             return $this->responseForbidden();
         }
 
@@ -136,6 +133,86 @@ class MemorialsController extends Controller
      *         in="header"
      *     ),
      *
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="title",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="text",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="first_name",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="middle_name",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="last_name",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="gender",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="place_of_birth",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="place_of_death",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="day_of_birth",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="day_of_death",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
      *     @OA\Parameter(
      *         in="query",
      *         name="default",
@@ -188,6 +265,103 @@ class MemorialsController extends Controller
      *         required=true,
      *         @OA\Schema(
      *           type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="title",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="text",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="first_name",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="middle_name",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="last_name",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="gender",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="goal_sum",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="number"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="place_of_birth",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="place_of_death",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="day_of_birth",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="day_of_death",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         in="query",
+     *         name="default",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="boolean"
      *         )
      *     ),
      *
@@ -332,7 +506,7 @@ class MemorialsController extends Controller
         Memorial $memorial,
         MemorialService $service,
     ): JsonResponse {
-        $service->changeStatus($memorial, Memorial::STATUS_DELETED);
+        $service->changeStatus($memorial, Statuses::STATUS_DELETED);
 
         return $this->responseNoContent();
     }
@@ -393,12 +567,55 @@ class MemorialsController extends Controller
     public function uploadAvatar(
         Memorial $memorial,
         UploadAvatarRequest $request,
-        MemorialService $service,
+        MediaService $service,
     ): JsonResponse {
         $service->uploadAvatar(
             file: $request->file('file'),
             model: $memorial,
         );
+
+        return $this->responseNoContent();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/memorials/bind-viewer",
+     *     summary="Bind user to memorial",
+     *     description="Bind user to memorial",
+     *     operationId="bind-user-to-memorial",
+     *     tags={"Memorials"},
+     *
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="MEMORIAL_ID",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=204,
+     *         description="Successful operation"
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Access Denied"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not found"
+     *     )
+     * )
+     */
+    public function bindViewer(
+        Memorial $memorial,
+        MemorialService $service,
+    ): JsonResponse {
+        $result = $service->bindViewer($memorial);
+        if ($result['result'] === 'error') {
+            return $this->responseBadRequest($result['message']);
+        }
 
         return $this->responseNoContent();
     }
